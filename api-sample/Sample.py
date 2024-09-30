@@ -105,6 +105,38 @@ def fetch_order_book(client):
             print("Error : Not Success Response  : " + holdings_resp.to_json())
 
 
+# def modify_order(client, order_id, new_quantity, limit_price):
+#     with client:
+#         order_modification = orders_api.OrdersApi(client)
+#         try:
+#             modify_order_resp = order_modification.modify_order(
+#                 sym_id="EQT_RELIANCE_EQ_NSE",
+#                 order_id=order_id,
+#                 qty=new_quantity,
+#                 type="limit",
+#                 limit_price=limit_price,
+#                 validity="day"
+#             )
+#             if modify_order_resp.s.lower() == "ok":
+#                 print("Order modified successfully: " + modify_order_resp.to_json())
+#             else:
+#                 print("Error modifying order: " + modify_order_resp.to_json())
+#         except openapi_client.ApiException as e:
+#             print("Exception when modifying order: %s\n" % e)
+
+# def cancel_order(client, order_id):
+#     with client:
+#         order_cancellation = orders_api.OrdersApi(client)
+#         try:
+#             cancel_order_resp = order_cancellation.cancel_order(order_id)
+#             if cancel_order_resp.s.lower() == "ok":
+#                 print("Order canceled successfully: " + cancel_order_resp.to_json())
+#             else:
+#                 print("Error canceling order: " + cancel_order_resp.to_json())
+#         except openapi_client.ApiException as e:
+#             print("Exception when canceling order: %s\n" % e)
+
+
 if __name__ == '__main__':
     api_client = openapi_client.ApiClient()
 
@@ -114,6 +146,12 @@ if __name__ == '__main__':
 
     fetch_order_book(api_client)
 
+    # if order_id:
+    #    modify_order(api_client, order_id, new_quantity=15, limit_price=2500.00)
+    #    cancel_order(api_client, order_id)
+
     # fetch_positions(api_client)
 
     # fetch_holdings(api_client)
+
+    

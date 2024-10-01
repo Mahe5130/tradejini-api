@@ -20,16 +20,19 @@ authKey = "Bearer " + apikey
 
 # Get the access token by providing\ the user credentials and the authToken
 password = "Shenoy@2000"
-two_fa = "129044"
+two_fa = "984974"
 two_fa_typ = "totp"
+auth_code = "0311c07d54c6a5e1dbc77b03f6de28c0"
+
+
 
 
 def set_access_token(client):
     with client:
         try:
-            auth_api = authorization_api.AuthorizationApi(client)
-            api_response = auth_api.updated_individual_token(authKey, password, two_fa, two_fa_typ)
-            auth_token = apikey + ":" + api_response.access_token
+            # auth_api = authorization_api.AuthorizationApi(client)
+            # api_response = auth_api.updated_individual_token(authKey, password, two_fa, two_fa_typ)
+            auth_token = apikey + ":" + auth_code
             client.configuration.access_token = auth_token
         except openapi_client.ApiException as e:
             # Change to logger if you wish
@@ -39,9 +42,9 @@ def set_access_token(client):
 def place_limit_order(client):
     with client:
         order_placement = orders_api.OrdersApi(client)
-        place_order_resp = order_placement.place_order("EQT_RELIANCE_EQ_NSE", 10, "buy", "limit", "delivery", "day",
-                                                       limit_price=2400.55, trig_price=0.00, disc_qty=3,
-                                                       amo=False, mkt_prot=2.0, remarks="")
+        place_order_resp = order_placement.place_order("OPTIDX_BANKNIFTY_NFO_2024-10-01_52800_PE", 10, "buy", "stoplimit", "normal", "day",
+                                                       limit_price=6000.25, trig_price=10.00, disc_qty=2,
+                                                       amo=False, mkt_prot=5.0, remarks="")
         if isinstance(place_order_resp.actual_instance, PlaceOrderResponse):
             resp = place_order_resp.actual_instance
             if resp.s.lower() == "ok":
@@ -105,37 +108,6 @@ def fetch_order_book(client):
             print("Error : Not Success Response  : " + holdings_resp.to_json())
 
 
-# def modify_order(client, order_id, new_quantity, limit_price):
-#     with client:
-#         order_modification = orders_api.OrdersApi(client)
-#         try:
-#             modify_order_resp = order_modification.modify_order(
-#                 sym_id="EQT_RELIANCE_EQ_NSE",
-#                 order_id=order_id,
-#                 qty=new_quantity,
-#                 type="limit",
-#                 limit_price=limit_price,
-#                 validity="day"
-#             )
-#             if modify_order_resp.s.lower() == "ok":
-#                 print("Order modified successfully: " + modify_order_resp.to_json())
-#             else:
-#                 print("Error modifying order: " + modify_order_resp.to_json())
-#         except openapi_client.ApiException as e:
-#             print("Exception when modifying order: %s\n" % e)
-
-# def cancel_order(client, order_id):
-#     with client:
-#         order_cancellation = orders_api.OrdersApi(client)
-#         try:
-#             cancel_order_resp = order_cancellation.cancel_order(order_id)
-#             if cancel_order_resp.s.lower() == "ok":
-#                 print("Order canceled successfully: " + cancel_order_resp.to_json())
-#             else:
-#                 print("Error canceling order: " + cancel_order_resp.to_json())
-#         except openapi_client.ApiException as e:
-#             print("Exception when canceling order: %s\n" % e)
-
 
 if __name__ == '__main__':
     api_client = openapi_client.ApiClient()
@@ -145,10 +117,6 @@ if __name__ == '__main__':
     place_limit_order(api_client)
 
     fetch_order_book(api_client)
-
-    # if order_id:
-    #    modify_order(api_client, order_id, new_quantity=15, limit_price=2500.00)
-    #    cancel_order(api_client, order_id)
 
     # fetch_positions(api_client)
 
